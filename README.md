@@ -1,9 +1,6 @@
 # openvpn-install-tr
 
-# ⚠ Henüz Çevrilmedi ⚠
-
-![Test](https://github.com/rootlus/openvpn-install-tr/workflows/Test/badge.svg)
-![Lint](https://github.com/rootlus/openvpn-install-tr/workflows/Lint/badge.svg)
+# ⚠ Henüz Çeviri Tamamlanmadı ⚠
 
 Debian, Ubuntu, Fedora, CentOS, Arch Linux, Oracle Linux, Rocky Linux ve AlmaLinux için OpenVPN yükleyicisi.
 
@@ -13,11 +10,11 @@ Ayrıca daha basit, güvenli, hızlı ve modern VPN protokolü için [wireguard-
 
 ## Nedir bu?
 
-This script is meant to be run on your own server, whether it's a VPS or a dedicated server, or even a computer at home.
+Bu yazılım, ister VPS ister özel bir sunucu, hatta evdeki bir bilgisayar olsun, kendi sunucunuzda çalıştırılmak üzere tasarlanmıştır.
 
-Once set up, you will be able to generate client configuration files for every device you want to connect.
+Kurulduktan sonra, bağlanmak istediğiniz her cihaz için istemci yapılandırma dosyaları oluşturabileceksiniz.
 
-Each client will be able to route its internet traffic through the server, fully encrypted.
+Her istemci internet trafiğini sunucu üzerinden tamamen şifrelenmiş olarak yönlendirebilecektir.
 
 ```mermaid
 graph LR
@@ -30,7 +27,7 @@ graph LR
   VPN -->|Encrypted Traffic| I[Internet]
 ```
 
-## Usage
+## Kullanım
 
 First, get the script and make it executable:
 
