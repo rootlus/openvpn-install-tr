@@ -6,13 +6,13 @@
 ![Lint](https://github.com/angristan/openvpn-install/workflows/Lint/badge.svg)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/angristan)
 
-OpenVPN installer for Debian, Ubuntu, Fedora, CentOS, Arch Linux, Oracle Linux, Rocky Linux and AlmaLinux.
+Debian, Ubuntu, Fedora, CentOS, Arch Linux, Oracle Linux, Rocky Linux ve AlmaLinux için OpenVPN yükleyicisi.
 
-This script will let you setup your own secure VPN server in just a few seconds.
+Bu yazılım sadece birkaç saniye ile güvenli VPN kurmanızı sağlar.
 
-You can also check out [wireguard-install](https://github.com/angristan/wireguard-install), a simple installer for a simpler, safer, faster and more modern VPN protocol.
+Ayrıca daha basit, güvenli, hızlı ve modern VPN protokolü için [wireguard-install](https://github.com/angristan/wireguard-install), bakabilirsiniz. (Türkçe değil ⚠)
 
-## What is this?
+## Nedir bu?
 
 This script is meant to be run on your own server, whether it's a VPS or a dedicated server, or even a computer at home.
 
