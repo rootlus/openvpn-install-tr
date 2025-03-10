@@ -2,9 +2,8 @@
 
 # ⚠ Henüz Çevrilmedi ⚠
 
-![Test](https://github.com/angristan/openvpn-install/workflows/Test/badge.svg)
-![Lint](https://github.com/angristan/openvpn-install/workflows/Lint/badge.svg)
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/angristan)
+![Test](https://github.com/rootlus/openvpn-install-tr/workflows/Test/badge.svg)
+![Lint](https://github.com/rootlus/openvpn-install-tr/workflows/Lint/badge.svg)
 
 Debian, Ubuntu, Fedora, CentOS, Arch Linux, Oracle Linux, Rocky Linux ve AlmaLinux için OpenVPN yükleyicisi.
 
