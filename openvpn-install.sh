@@ -23,14 +23,14 @@ function checkOS() {
 
 		if [[ $ID == "debian" || $ID == "raspbian" ]]; then
 			if [[ $VERSION_ID -lt 9 ]]; then
-				echo "⚠️ Your version of Debian is not supported."
+				echo "⚠️ Bu Debian sürümü desteklenmiyor."
 				echo ""
-				echo "However, if you're using Debian >= 9 or unstable/testing then you can continue, at your own risk."
+				echo "Ancak, eğer Debian >= 9 veya stabil olamayan/testing sürümü kullanıyorsanız riski kabul ederek devam edebilirsiniz."
 				echo ""
 				until [[ $CONTINUE =~ (y|n) ]]; do
-					read -rp "Continue? [y/n]: " -e CONTINUE
+					read -rp "Devam et? [e/h]: " -e CONTINUE
 				done
-				if [[ $CONTINUE == "n" ]]; then
+				if [[ $CONTINUE == "h" ]]; then
 					exit 1
 				fi
 			fi
@@ -38,14 +38,14 @@ function checkOS() {
 			OS="ubuntu"
 			MAJOR_UBUNTU_VERSION=$(echo "$VERSION_ID" | cut -d '.' -f1)
 			if [[ $MAJOR_UBUNTU_VERSION -lt 16 ]]; then
-				echo "⚠️ Your version of Ubuntu is not supported."
+				echo "⚠️ Bu Ubuntu sürümü desteklenmiyor."
 				echo ""
-				echo "However, if you're using Ubuntu >= 16.04 or beta, then you can continue, at your own risk."
+				echo "Ancak, eğer Ubuntu >= 16.04 veya beta sürümü kullanıyorsanız, riski devam ederek kullanabilirsiniz."
 				echo ""
 				until [[ $CONTINUE =~ (y|n) ]]; do
-					read -rp "Continue? [y/n]: " -e CONTINUE
+					read -rp "Devam et? [e/h]: " -e CONTINUE
 				done
-				if [[ $CONTINUE == "n" ]]; then
+				if [[ $CONTINUE == "h" ]]; then
 					exit 1
 				fi
 			fi
@@ -58,9 +58,9 @@ function checkOS() {
 		if [[ $ID == "centos" || $ID == "rocky" || $ID == "almalinux" ]]; then
 			OS="centos"
 			if [[ ${VERSION_ID%.*} -lt 7 ]]; then
-				echo "⚠️ Your version of CentOS is not supported."
+				echo "⚠️ Bu CentOS sürümü desteklenmiyor."
 				echo ""
-				echo "The script only support CentOS 7 and CentOS 8."
+				echo "Yazılım sadece CentOS 7 ve CentOS 8 destekler."
 				echo ""
 				exit 1
 			fi
@@ -68,9 +68,9 @@ function checkOS() {
 		if [[ $ID == "ol" ]]; then
 			OS="oracle"
 			if [[ ! $VERSION_ID =~ (8) ]]; then
-				echo "Your version of Oracle Linux is not supported."
+				echo "Bu Oracle Linux sürümü desteklenmiyor."
 				echo ""
-				echo "The script only support Oracle Linux 8."
+				echo "Yazılım sadece Oracle Linux 8 sürümünü destekler."
 				exit 1
 			fi
 		fi
@@ -80,9 +80,9 @@ function checkOS() {
 			elif [[ "$(echo "$PRETTY_NAME" | cut -c 1-18)" == "Amazon Linux 2023." ]] && [[ "$(echo "$PRETTY_NAME" | cut -c 19)" -ge 6 ]]; then
 				OS="amzn2023"
 			else
-				echo "⚠️ Your version of Amazon Linux is not supported."
+				echo "⚠️ Amazon Linux sürümünüz desteklenmiypr."
 				echo ""
-				echo "The script only support Amazon Linux 2 or Amazon Linux 2023.6+"
+				echo "Yazılım sadece Amazon Linux 2 veya Amazon Linux 2023.6+ sürümünü destekler."
 				echo ""
 				exit 1
 			fi
@@ -90,18 +90,18 @@ function checkOS() {
 	elif [[ -e /etc/arch-release ]]; then
 		OS=arch
 	else
-		echo "Looks like you aren't running this installer on a Debian, Ubuntu, Fedora, CentOS, Amazon Linux 2, Oracle Linux 8 or Arch Linux system"
+		echo "Anlaşılan yazılımı Debian, Ubuntu, Fedora, CentOS, Amazon Linux 2, Oracle Linux 8 veya Arch Linux sisteminde çalıştırmıyorsun"
 		exit 1
 	fi
 }
 
 function initialCheck() {
 	if ! isRoot; then
-		echo "Sorry, you need to run this as root"
+		echo "Üzgünüm, root olarak çalıştırmanız gerek."
 		exit 1
 	fi
 	if ! tunAvailable; then
-		echo "TUN is not available"
+		echo "TUN mevcut değil"
 		exit 1
 	fi
 	checkOS
@@ -251,7 +251,7 @@ function resolvePublicIP() {
 	fi
 
 	if [[ -z $PUBLIC_IP ]]; then
-		echo >&2 echo "Couldn't solve the public IP"
+		echo >&2 echo "Genel IP çözülemedi"
 		exit 1
 	fi
 
@@ -259,15 +259,16 @@ function resolvePublicIP() {
 }
 
 function installQuestions() {
-	echo "Welcome to the OpenVPN installer!"
-	echo "The git repository is available at: https://github.com/angristan/openvpn-install"
+	echo "OpenVPN yükleyicisine hoş geldiniz!"
+	echo "Orjinal git deposu: https://github.com/angristan/openvpn-install"
+ 	echo "Çevrilmiş git deposu: https://github.com/rootlus/openvpn-install-tr"
 	echo ""
 
-	echo "I need to ask you a few questions before starting the setup."
-	echo "You can leave the default options and just press enter if you are ok with them."
+	echo "Kuruluma başlamadan önce birkaç soru soracağım."
+	echo "Varsayılan ayar ile bırakabilirsin ve eğer tamamsa enter'a bas."
 	echo ""
-	echo "I need to know the IPv4 address of the network interface you want OpenVPN listening to."
-	echo "Unless your server is behind NAT, it should be your public IPv4 address."
+	echo "OpenVPN'in dinlemesini istediğiniz ağ arayüzünün IPv4 adresini bilmem gerekiyor."
+	echo "Tabi eğer sunucunuz NAT arkasında değilse, genel IPv4 adresiniz olmalıdır."
 
 	# Detect public IPv4 address and pre-fill for the user
 	IP=$(ip -4 addr | sed -ne 's|^.* inet \([^/]*\)/.* scope global.*$|\1|p' | head -1)
@@ -283,8 +284,8 @@ function installQuestions() {
 	# If $IP is a private IP address, the server must be behind NAT
 	if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
 		echo ""
-		echo "It seems this server is behind NAT. What is its public IPv4 address or hostname?"
-		echo "We need it for the clients to connect to the server."
+		echo "Görünüşe göre bu sunucu NAT'ın arkasında. Genel IPv4 adresi veya ana bilgisayar adı nedir?"
+		echo "İstemcilerin sunucuya bağlanması için buna ihtiyacımız var."
 
 		if [[ -z $ENDPOINT ]]; then
 			DEFAULT_ENDPOINT=$(resolvePublicIP)
@@ -296,7 +297,7 @@ function installQuestions() {
 	fi
 
 	echo ""
-	echo "Checking for IPv6 connectivity..."
+	echo "IPv6 bağlantısı kontrol ediliyor..."
 	echo ""
 	# "ping6" and "ping -6" availability varies depending on the distribution
 	if type ping6 >/dev/null 2>&1; then
@@ -305,24 +306,25 @@ function installQuestions() {
 		PING6="ping -6 -c3 ipv6.google.com > /dev/null 2>&1"
 	fi
 	if eval "$PING6"; then
-		echo "Your host appears to have IPv6 connectivity."
+		echo "Ana bilgisayarınızın IPv6 bağlantısı var gibi görünüyor."
 		SUGGESTION="y"
 	else
-		echo "Your host does not appear to have IPv6 connectivity."
+		echo "Ana bilgisayarınızın IPv6 bağlantısı yok gibi görünüyor."
 		SUGGESTION="n"
 	fi
 	echo ""
 	# Ask the user if they want to enable IPv6 regardless its availability.
 	until [[ $IPV6_SUPPORT =~ (y|n) ]]; do
-		read -rp "Do you want to enable IPv6 support (NAT)? [y/n]: " -e -i $SUGGESTION IPV6_SUPPORT
+		read -rp "IPv6 desteğini aktif etmek ister misin? (NAT)? [y/n]: " -e -i $SUGGESTION IPV6_SUPPORT
 	done
 	echo ""
-	echo "What port do you want OpenVPN to listen to?"
-	echo "   1) Default: 1194"
-	echo "   2) Custom"
-	echo "   3) Random [49152-65535]"
+	echo "OpenVPN hangi port üzerinden dinlensin?"
+ 	echo "NOT: Bazı sağlayıcılar varsayılan portu engelleyebilir. Rastgele seçmeniz daha iyi bir sonuç olur."
+	echo "   1) Varsayılan: 1194"
+	echo "   2) Özel"
+	echo "   3) Rastgele [49152-65535]"
 	until [[ $PORT_CHOICE =~ ^[1-3]$ ]]; do
-		read -rp "Port choice [1-3]: " -e -i 1 PORT_CHOICE
+		read -rp "Port seçeneği [1-3]: " -e -i 1 PORT_CHOICE
 	done
 	case $PORT_CHOICE in
 	1)
@@ -330,22 +332,22 @@ function installQuestions() {
 		;;
 	2)
 		until [[ $PORT =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ]; do
-			read -rp "Custom port [1-65535]: " -e -i 1194 PORT
+			read -rp "Özel port [1-65535]: " -e -i 1194 PORT
 		done
 		;;
 	3)
 		# Generate random number within private ports range
 		PORT=$(shuf -i49152-65535 -n1)
-		echo "Random Port: $PORT"
+		echo "Rastgele Port: $PORT"
 		;;
 	esac
 	echo ""
-	echo "What protocol do you want OpenVPN to use?"
-	echo "UDP is faster. Unless it is not available, you shouldn't use TCP."
+	echo "OpenVPN hangi protokol'de kullanılsın?"
+	echo "UDP daha hızlıdır. Mevcut olmadığı sürece TCP kullanmamalısınız."
 	echo "   1) UDP"
 	echo "   2) TCP"
 	until [[ $PROTOCOL_CHOICE =~ ^[1-2]$ ]]; do
-		read -rp "Protocol [1-2]: " -e -i 1 PROTOCOL_CHOICE
+		read -rp "Protokol [1-2]: " -e -i 1 PROTOCOL_CHOICE
 	done
 	case $PROTOCOL_CHOICE in
 	1)
@@ -356,32 +358,32 @@ function installQuestions() {
 		;;
 	esac
 	echo ""
-	echo "What DNS resolvers do you want to use with the VPN?"
-	echo "   1) Current system resolvers (from /etc/resolv.conf)"
-	echo "   2) Self-hosted DNS Resolver (Unbound)"
-	echo "   3) Cloudflare (Anycast: worldwide)"
-	echo "   4) Quad9 (Anycast: worldwide)"
-	echo "   5) Quad9 uncensored (Anycast: worldwide)"
-	echo "   6) FDN (France)"
-	echo "   7) DNS.WATCH (Germany)"
-	echo "   8) OpenDNS (Anycast: worldwide)"
-	echo "   9) Google (Anycast: worldwide)"
-	echo "   10) Yandex Basic (Russia)"
-	echo "   11) AdGuard DNS (Anycast: worldwide)"
-	echo "   12) NextDNS (Anycast: worldwide)"
-	echo "   13) Custom"
+	echo "VPN için hangi DNS sağlayıcısı olsun?"
+	echo "   1) Mevcut sistem sağlayıcısı (from /etc/resolv.conf)"
+	echo "   2) Kendi-Barındırılmış DNS sağlayıcısı (Unbound)"
+	echo "   3) Cloudflare (Yayın: dünya çapı)"
+	echo "   4) Quad9 (Yayın: dünya çapı)"
+	echo "   5) Quad9 uncensored (Yayın: dünya çapı)"
+	echo "   6) FDN (Fransa)"
+	echo "   7) DNS.WATCH (Almanya)"
+	echo "   8) OpenDNS (Yayın: dünya çapı)"
+	echo "   9) Google (Yayın: dünya çapı)"
+	echo "   10) Yandex Basic (Rusya)"
+	echo "   11) AdGuard DNS (Yayın: dünya çapı)"
+	echo "   12) NextDNS (Yayın: dünya çapı)"
+	echo "   13) Özel"
 	until [[ $DNS =~ ^[0-9]+$ ]] && [ "$DNS" -ge 1 ] && [ "$DNS" -le 13 ]; do
 		read -rp "DNS [1-12]: " -e -i 11 DNS
 		if [[ $DNS == 2 ]] && [[ -e /etc/unbound/unbound.conf ]]; then
 			echo ""
-			echo "Unbound is already installed."
-			echo "You can allow the script to configure it in order to use it from your OpenVPN clients"
-			echo "We will simply add a second server to /etc/unbound/unbound.conf for the OpenVPN subnet."
-			echo "No changes are made to the current configuration."
+			echo "Unbound zaten yüklü."
+			echo "OpenVPN istemcilerinizden kullanmak için betiğin yapılandırmasına izin verebilirsiniz"
+			echo "OpenVPN alt ağı için /etc/unbound/unbound.conf dosyasına ikinci bir sunucu ekleyeceğiz."
+			echo "Mevcut yapılandırmada hiçbir değişiklik yapılmadı."
 			echo ""
 
 			until [[ $CONTINUE =~ (y|n) ]]; do
-				read -rp "Apply configuration changes to Unbound? [y/n]: " -e CONTINUE
+				read -rp "Yapılandırma değişiklikleri Unbound'a uygula? [y/n]: " -e CONTINUE
 			done
 			if [[ $CONTINUE == "n" ]]; then
 				# Break the loop and cleanup
@@ -390,10 +392,10 @@ function installQuestions() {
 			fi
 		elif [[ $DNS == "13" ]]; then
 			until [[ $DNS1 =~ ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; do
-				read -rp "Primary DNS: " -e DNS1
+				read -rp "Birincil DNS: " -e DNS1
 			done
 			until [[ $DNS2 =~ ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; do
-				read -rp "Secondary DNS (optional): " -e DNS2
+				read -rp "İkinci DNS (isteğe bağlı): " -e DNS2
 				if [[ $DNS2 == "" ]]; then
 					break
 				fi
@@ -401,17 +403,17 @@ function installQuestions() {
 		fi
 	done
 	echo ""
-	echo "Do you want to use compression? It is not recommended since the VORACLE attack makes use of it."
+	echo "Sıkıştırma kullanmak istiyor musunuz? VORACLE saldırısı bunu kullandığından tavsiye edilmez."
 	until [[ $COMPRESSION_ENABLED =~ (y|n) ]]; do
-		read -rp"Enable compression? [y/n]: " -e -i n COMPRESSION_ENABLED
+		read -rp"Sıkıştırma kullan? [y/n]: " -e -i n COMPRESSION_ENABLED
 	done
 	if [[ $COMPRESSION_ENABLED == "y" ]]; then
-		echo "Choose which compression algorithm you want to use: (they are ordered by efficiency)"
+		echo "Hangi sıkıştırma algoritmasını kullanmak istediğinizi seçin: (bunlar verimliliğe göre sıralanmıştır)"
 		echo "   1) LZ4-v2"
 		echo "   2) LZ4"
 		echo "   3) LZ0"
 		until [[ $COMPRESSION_CHOICE =~ ^[1-3]$ ]]; do
-			read -rp"Compression algorithm [1-3]: " -e -i 1 COMPRESSION_CHOICE
+			read -rp"Sıkıştırma algoritması [1-3]: " -e -i 1 COMPRESSION_CHOICE
 		done
 		case $COMPRESSION_CHOICE in
 		1)
@@ -426,13 +428,13 @@ function installQuestions() {
 		esac
 	fi
 	echo ""
-	echo "Do you want to customize encryption settings?"
-	echo "Unless you know what you're doing, you should stick with the default parameters provided by the script."
-	echo "Note that whatever you choose, all the choices presented in the script are safe. (Unlike OpenVPN's defaults)"
-	echo "See https://github.com/angristan/openvpn-install#security-and-encryption to learn more."
+	echo "Şifreleme ayarlarını özelleştirmek ister misiniz?"
+	echo "Ne yaptığınızı bilmiyorsanız, komut dosyası tarafından sağlanan varsayılan parametrelere bağlı kalmalısınız."
+	echo "Ne seçerseniz seçin, komut dosyasında sunulan tüm seçeneklerin güvenli olduğunu unutmayın. (OpenVPN'in varsayılanlarının aksine)"
+	echo "Daha fazla bilgi için: https://github.com/angristan/openvpn-install#security-and-encryption"
 	echo ""
 	until [[ $CUSTOMIZE_ENC =~ (y|n) ]]; do
-		read -rp "Customize encryption settings? [y/n]: " -e -i n CUSTOMIZE_ENC
+		read -rp "Şifreleme ayarlarını özelleştir? [y/n]: " -e -i n CUSTOMIZE_ENC
 	done
 	if [[ $CUSTOMIZE_ENC == "n" ]]; then
 		# Use default, sane and fast parameters
@@ -446,8 +448,8 @@ function installQuestions() {
 		TLS_SIG="1" # tls-crypt
 	else
 		echo ""
-		echo "Choose which cipher you want to use for the data channel:"
-		echo "   1) AES-128-GCM (recommended)"
+		echo "Veri kanalı için hangi şifreyi kullanmak istediğinizi seçin:"
+		echo "   1) AES-128-GCM (Önerilen)"
 		echo "   2) AES-192-GCM"
 		echo "   3) AES-256-GCM"
 		echo "   4) AES-128-CBC"
@@ -477,17 +479,17 @@ function installQuestions() {
 			;;
 		esac
 		echo ""
-		echo "Choose what kind of certificate you want to use:"
-		echo "   1) ECDSA (recommended)"
+		echo "Nasıl bir tür sertifika kullanmak istersiniz?:"
+		echo "   1) ECDSA (önerilen)"
 		echo "   2) RSA"
 		until [[ $CERT_TYPE =~ ^[1-2]$ ]]; do
-			read -rp"Certificate key type [1-2]: " -e -i 1 CERT_TYPE
+			read -rp"Sertifika anahtar türü [1-2]: " -e -i 1 CERT_TYPE
 		done
 		case $CERT_TYPE in
 		1)
 			echo ""
-			echo "Choose which curve you want to use for the certificate's key:"
-			echo "   1) prime256v1 (recommended)"
+			echo "Sertifikanın anahtarı için hangi eğriyi kullanmak istediğinizi seçin:"
+			echo "   1) prime256v1 (önerilen)"
 			echo "   2) secp384r1"
 			echo "   3) secp521r1"
 			until [[ $CERT_CURVE_CHOICE =~ ^[1-3]$ ]]; do
@@ -507,12 +509,12 @@ function installQuestions() {
 			;;
 		2)
 			echo ""
-			echo "Choose which size you want to use for the certificate's RSA key:"
-			echo "   1) 2048 bits (recommended)"
+			echo "Sertifikanın RSA anahtarı için hangi boyutu kullanmak istediğinizi seçin:"
+			echo "   1) 2048 bits (önerilir)"
 			echo "   2) 3072 bits"
 			echo "   3) 4096 bits"
 			until [[ $RSA_KEY_SIZE_CHOICE =~ ^[1-3]$ ]]; do
-				read -rp "RSA key size [1-3]: " -e -i 1 RSA_KEY_SIZE_CHOICE
+				read -rp "RSA anahtar boyutu [1-3]: " -e -i 1 RSA_KEY_SIZE_CHOICE
 			done
 			case $RSA_KEY_SIZE_CHOICE in
 			1)
@@ -528,13 +530,13 @@ function installQuestions() {
 			;;
 		esac
 		echo ""
-		echo "Choose which cipher you want to use for the control channel:"
+		echo "Kontrol kanalı için hangi şifreyi kullanmak istediğinizi seçin:"
 		case $CERT_TYPE in
 		1)
-			echo "   1) ECDHE-ECDSA-AES-128-GCM-SHA256 (recommended)"
+			echo "   1) ECDHE-ECDSA-AES-128-GCM-SHA256 (önerilen)"
 			echo "   2) ECDHE-ECDSA-AES-256-GCM-SHA384"
 			until [[ $CC_CIPHER_CHOICE =~ ^[1-2]$ ]]; do
-				read -rp"Control channel cipher [1-2]: " -e -i 1 CC_CIPHER_CHOICE
+				read -rp"Kontrol kanal şifresi [1-2]: " -e -i 1 CC_CIPHER_CHOICE
 			done
 			case $CC_CIPHER_CHOICE in
 			1)
@@ -546,10 +548,10 @@ function installQuestions() {
 			esac
 			;;
 		2)
-			echo "   1) ECDHE-RSA-AES-128-GCM-SHA256 (recommended)"
+			echo "   1) ECDHE-RSA-AES-128-GCM-SHA256 (önerilen)"
 			echo "   2) ECDHE-RSA-AES-256-GCM-SHA384"
 			until [[ $CC_CIPHER_CHOICE =~ ^[1-2]$ ]]; do
-				read -rp"Control channel cipher [1-2]: " -e -i 1 CC_CIPHER_CHOICE
+				read -rp"Kontrol kanal şifresi [1-2]: " -e -i 1 CC_CIPHER_CHOICE
 			done
 			case $CC_CIPHER_CHOICE in
 			1)
@@ -562,21 +564,21 @@ function installQuestions() {
 			;;
 		esac
 		echo ""
-		echo "Choose what kind of Diffie-Hellman key you want to use:"
-		echo "   1) ECDH (recommended)"
+		echo "Ne tür bir Diffie-Hellman anahtarı kullanmak istediğinizi seçin:"
+		echo "   1) ECDH (önerilen)"
 		echo "   2) DH"
 		until [[ $DH_TYPE =~ [1-2] ]]; do
-			read -rp"DH key type [1-2]: " -e -i 1 DH_TYPE
+			read -rp"DH anahtar türü [1-2]: " -e -i 1 DH_TYPE
 		done
 		case $DH_TYPE in
 		1)
 			echo ""
-			echo "Choose which curve you want to use for the ECDH key:"
-			echo "   1) prime256v1 (recommended)"
+			echo "ECDH anahtarı için hangi eğriyi kullanmak istediğinizi seçin:"
+			echo "   1) prime256v1 (önerilen)"
 			echo "   2) secp384r1"
 			echo "   3) secp521r1"
 			while [[ $DH_CURVE_CHOICE != "1" && $DH_CURVE_CHOICE != "2" && $DH_CURVE_CHOICE != "3" ]]; do
-				read -rp"Curve [1-3]: " -e -i 1 DH_CURVE_CHOICE
+				read -rp"Eğri [1-3]: " -e -i 1 DH_CURVE_CHOICE
 			done
 			case $DH_CURVE_CHOICE in
 			1)
@@ -592,8 +594,8 @@ function installQuestions() {
 			;;
 		2)
 			echo ""
-			echo "Choose what size of Diffie-Hellman key you want to use:"
-			echo "   1) 2048 bits (recommended)"
+			echo "Hangi boyutta Diffie-Hellman anahtarı kullanmak istediğinizi seçin:"
+			echo "   1) 2048 bits (önerilen)"
 			echo "   2) 3072 bits"
 			echo "   3) 4096 bits"
 			until [[ $DH_KEY_SIZE_CHOICE =~ ^[1-3]$ ]]; do
@@ -620,7 +622,7 @@ function installQuestions() {
 			echo "The digest algorithm authenticates tls-auth packets from the control channel."
 		fi
 		echo "Which digest algorithm do you want to use for HMAC?"
-		echo "   1) SHA-256 (recommended)"
+		echo "   1) SHA-256 (önerilen)"
 		echo "   2) SHA-384"
 		echo "   3) SHA-512"
 		until [[ $HMAC_ALG_CHOICE =~ ^[1-3]$ ]]; do
@@ -640,7 +642,7 @@ function installQuestions() {
 		echo ""
 		echo "You can add an additional layer of security to the control channel with tls-auth and tls-crypt"
 		echo "tls-auth authenticates the packets, while tls-crypt authenticate and encrypt them."
-		echo "   1) tls-crypt (recommended)"
+		echo "   1) tls-crypt (önerilen)"
 		echo "   2) tls-auth"
 		until [[ $TLS_SIG =~ [1-2] ]]; do
 			read -rp "Control channel additional security mechanism [1-2]: " -e -i 1 TLS_SIG
