@@ -56,24 +56,24 @@ Ev dizinizde, `.ovpn` dosyaları alacaksınız. Bunlar istemci yapılandırma do
 
 Eğer sorunuz var ise, önce [SSS](#faq)'lara bakın. Ve eğer yardım gerekiyor ise, [tartışma](https://github.com/angristan/openvpn-install/discussions)'a bakabilirsiniz. Lütfen önce mevcut konuları ve tartışmaları araştırın.
 
-### Headless install
+### Başsız kurulum
 
-It's also possible to run the script headless, e.g. without waiting for user input, in an automated manner.
+Ayrıca, kullanıcı girişi beklemeden, otomatik bir şekilde scripti başsız olarak çalıştırmak da mümkündür
 
-Example usage:
+Örnek kullanım:
 
 ```bash
 AUTO_INSTALL=y ./openvpn-install.sh
 
-# or
+# veya
 
 export AUTO_INSTALL=y
 ./openvpn-install.sh
 ```
 
-A default set of variables will then be set, by passing the need for user input.
+Varsayılan bir değişken seti, kullanıcı girişi gereksinimini ortadan kaldırarak ayarlanacaktır.
 
-If you want to customise your installation, you can export them or specify them on the same line, as shown above.
+Kurulumunuzu özelleştirmek isterseniz, bunları dışa aktarabilir veya yukarıda gösterildiği gibi aynı satırda belirtebilirsiniz.
 
 - `APPROVE_INSTALL=y`
 - `APPROVE_IP=y`
@@ -86,19 +86,18 @@ If you want to customise your installation, you can export them or specify them 
 - `CLIENT=clientname`
 - `PASS=1`
 
-If the server is behind NAT, you can specify its endpoint with the `ENDPOINT` variable. If the endpoint is the public IP address which it is behind, you can use `ENDPOINT=$(curl -4 ifconfig.co)` (the script will default to this). The endpoint can be an IPv4 or a domain.
+Eğer sunucu NAT arkasındaysa, `ENDPOINT` değişkeni ile uç noktasını belirtebilirsiniz. Eğer uç nokta, arkasında bulunduğu genel IP adresiyse, `ENDPOINT=$(curl -4 ifconfig.co)` kullanabilirsiniz (script varsayılan olarak bunu kullanacaktır). Uç nokta bir IPv4 adresi veya bir alan adı olabilir.
 
-Other variables can be set depending on your choice (encryption, compression). You can search for them in the `installQuestions()` function of the script.
+Seçiminize bağlı olarak diğer değişkenler de ayarlanabilir (şifreleme, sıkıştırma). Bunları betiğin `installQuestions()` fonksiyonunda arayabilirsiniz.
 
-Password-protected clients are not supported by the headless installation method since user input is expected by Easy-RSA.
+Şifre korumalı istemciler, Easy-RSA tarafından kullanıcı girişi beklendiği için başsız kurulum yöntemiyle desteklenmemektedir.
 
-The headless install is more-or-less idempotent, in that it has been made safe to run multiple times with the same parameters, e.g. by a state provisioner like Ansible/Terraform/Salt/Chef/Puppet. It will only install and regenerate the Easy-RSA PKI if it doesn't already exist, and it will only install OpenVPN and other upstream dependencies if OpenVPN isn't already installed. It will recreate all local config and re-generate the client file on each headless run.
+Başsız kurulum, aynı parametrelerle birden fazla kez çalıştırılmak için güvenli hale getirilmiş olduğundan, daha az veya daha çok idempotenttir; örneğin, Ansible/Terraform/Salt/Chef/Puppet gibi bir durum sağlayıcı tarafından. Easy-RSA PKI zaten mevcut değilse yalnızca kuracak ve yeniden oluşturacaktır ve OpenVPN zaten kurulu değilse yalnızca OpenVPN ve diğer üst bağımlılıkları kuracaktır. Her başsız çalıştırmada tüm yerel yapılandırmayı yeniden oluşturacak ve istemci dosyasını yeniden üretecektir.
 
-### Headless User Addition
+Başsız Kullanıcı Ekleme
+Yeni bir kullanıcının eklenmesini otomatikleştirmek de mümkündür. Burada anahtar, scripti çağırmadan önce `MENU_OPTION` değişkeninin (string) değerini ve diğer zorunlu değişkenleri sağlamaktır.
 
-It's also possible to automate the addition of a new user. Here, the key is to provide the (string) value of the `MENU_OPTION` variable along with the remaining mandatory variables before invoking the script.
-
-The following Bash script adds a new user `foo` to an existing OpenVPN configuration
+Aşağıdaki Bash betiği, mevcut bir OpenVPN yapılandırmasına yeni bir kullanıcı foo ekler.
 
 ```bash
 #!/bin/bash
@@ -108,29 +107,29 @@ export PASS="1"
 ./openvpn-install.sh
 ```
 
-## Features
+## Özellikler
 
-- Installs and configures a ready-to-use OpenVPN server
-- Iptables rules and forwarding managed in a seamless way
-- If needed, the script can cleanly remove OpenVPN, including configuration and iptables rules
-- Customisable encryption settings, enhanced default settings (see [Security and Encryption](#security-and-encryption) below)
-- OpenVPN 2.4 features, mainly encryption improvements (see [Security and Encryption](#security-and-encryption) below)
-- Variety of DNS resolvers to be pushed to the clients
-- Choice to use a self-hosted resolver with Unbound (supports already existing Unbound installations)
-- Choice between TCP and UDP
-- NATed IPv6 support
-- Compression disabled by default to prevent VORACLE. LZ4 (v1/v2) and LZ0 algorithms available otherwise.
-- Unprivileged mode: run as `nobody`/`nogroup`
-- Block DNS leaks on Windows 10
-- Randomised server certificate name
-- Choice to protect clients with a password (private key encryption)
-- Many other little things!
+- Kullanıma hazır bir OpenVPN sunucusu kurar ve yapılandırır
+- Iptables kuralları ve yönlendirme sorunsuz bir şekilde yönetilir
+- Gerekirse, betiğin OpenVPN'i, yapılandırma ve iptables kuralları dahil olmak üzere temiz bir şekilde kaldırabilir
+- Özelleştirilebilir şifreleme, geliştirilmiş varsayılan ayarlar (aşağıdaki [Güvenlik ve Şifreleme](#security-and-encryption) bölümüne bakın)
+- OpenVPN 2.4 özellikleri, esasen şifreleme iyileştirmeleri (aşağıdaki [Güvenlik ve Şifreleme](#security-and-encryption) bölümüne bakın)
+- İstemcilere yönlendirilecek çeşitli DNS çözümleyicileri
+- Mevcut Unbound kurulumlarını destekleyen kendi barındırdığınız bir çözümleyiciyi kullanma seçeneği
+- TCP ve UDP arasında seçim yapma
+- NAT'lı IPv6 desteği
+- VORACLE'ı önlemek için varsayılan olarak sıkıştırma devre dışı bırakılmıştır. Aksi takdirde LZ4 (v1/v2) ve LZ0 algoritmaları mevcuttur.
+- Yetkisiz mod: `nobody`/`nogroup` olarak çalıştırma
+- Windows 10'da DNS sızıntılarını engelleme
+- Rastgele sunucu sertifika adı
+- İstemcileri bir şifre ile koruma seçeneği (özel anahtar şifrelemesi)
+- Daha birçok küçük şey!
 
-## Compatibility
+## Uyumluluk
 
-The script supports these Linux distributions:
+Bu betik aşağıdaki linux dağıtımlarını destekler:
 
-|                        | Support |
+|                        |  Destek |
 | ---------------------- | ------- |
 | AlmaLinux 8            | ✅      |
 | Amazon Linux 2         | ✅      |
@@ -144,13 +143,13 @@ The script supports these Linux distributions:
 | Rocky Linux 8          | ✅      |
 | Ubuntu >= 18.04        | ✅ 🤖   |
 
-To be noted:
+Not olarak:
 
-- The script is regularly tested against the distributions marked with a 🤖 only.
-  - It's only tested on `amd64` architecture.
-- It should work on older versions such as Debian 8+, Ubuntu 16.04+ and previous Fedora releases. But versions not in the table above are not officially supported.
-  - It should also support versions between the LTS versions, but these are not tested.
-- The script requires `systemd`.
+- Betik, yalnızca 🤖 ile işaretlenmiş dağıtımlar üzerinde düzenli olarak test edilmektedir.
+  - Sadece `amd64` mimarisinde test edilmektedir.
+- Debian 8+, Ubuntu 16.04+ ve önceki Fedora sürümleri gibi daha eski sürümlerde çalışması beklenmektedir. Ancak yukarıdaki tabloda yer almayan sürümler resmi olarak desteklenmemektedir.
+  - LTS sürümleri arasındaki sürümleri de desteklemesi beklenmektedir, ancak bunlar test edilmemiştir.
+- Betik `systemd` gerektirmektedir.
 
 ## Fork
 
