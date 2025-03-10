@@ -4,13 +4,13 @@
 
 Debian, Ubuntu, Fedora, CentOS, Arch Linux, Oracle Linux, Rocky Linux ve AlmaLinux için OpenVPN yükleyicisi.
 
-Bu yazılım sadece birkaç saniye ile güvenli VPN kurmanızı sağlar.
+Bu betik sadece birkaç saniye ile güvenli VPN kurmanızı sağlar.
 
 Ayrıca daha basit, güvenli, hızlı ve modern VPN protokolü için [wireguard-install](https://github.com/angristan/wireguard-install), bakabilirsiniz. (Türkçe değil ⚠)
 
 ## Nedir bu?
 
-Bu yazılım, ister VPS ister özel bir sunucu, hatta evdeki bir bilgisayar olsun, kendi sunucunuzda çalıştırılmak üzere tasarlanmıştır.
+Bu betik, ister VPS ister özel bir sunucu, hatta evdeki bir bilgisayar olsun, kendi sunucunuzda çalıştırılmak üzere tasarlanmıştır.
 
 Kurulduktan sonra, bağlanmak istediğiniz her cihaz için istemci yapılandırma dosyaları oluşturabileceksiniz.
 
@@ -18,43 +18,43 @@ Her istemci internet trafiğini sunucu üzerinden tamamen şifrelenmiş olarak y
 
 ```mermaid
 graph LR
-  A[Phone] --> VPN
+  A[Telefon] --> VPN
   B[Laptop] --> VPN
-  C[Computer] --> VPN
+  C[Bilgisayar] --> VPN
 
-  VPN[OpenVPN Server]
+  VPN[OpenVPN Sunucusu]
 
-  VPN -->|Encrypted Traffic| I[Internet]
+  VPN -->|Şifrelenmiş Traffik| I[Internet]
 ```
 
 ## Kullanım
 
-First, get the script and make it executable:
+Önce, betiği al ve çalıştırabilir yap:
 
 ```bash
-curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
+curl -O https://raw.githubusercontent.com/rootlus/openvpn-install-tr/master/openvpn-install.sh
 chmod +x openvpn-install.sh
 ```
 
-Then run it:
+Sonra çalıştır:
 
 ```sh
 ./openvpn-install.sh
 ```
 
-You need to run the script as root and have the TUN module enabled.
+Betiği root olarak çalıştırmanız ve TUN modülünü etkinleştirmeniz gerekir.
 
-The first time you run it, you'll have to follow the assistant and answer a few questions to setup your VPN server.
+İlk kez çalıştırdığınızda, VPN sunucunuzu kurmak için asistanı takip etmeniz ve birkaç soruyu yanıtlamanız gerekecektir.
 
-When OpenVPN is installed, you can run the script again, and you will get the choice to:
+OpenVPN yüklendiği zaman, betiği tekrar çalıştırabilir, ve söyle seçenekler alacaksın:
 
-- Add a client
-- Remove a client
-- Uninstall OpenVPN
+- Bir istemci ekle
+- Bir istemci sil
+- OpenVPN'i sil
 
-In your home directory, you will have `.ovpn` files. These are the client configuration files. Download them from your server and connect using your favorite OpenVPN client.
+Ev dizinizde, `.ovpn` dosyaları alacaksınız. Bunlar istemci yapılandırma dosyalarıdır. Bunları sunucunuzdan indirin ve favori OpenVPN istemcinizi kullanarak bağlanın.
 
-If you have any question, head to the [FAQ](#faq) first. And if you need help, you can open a [discussion](https://github.com/angristan/openvpn-install/discussions). Please search existing issues and dicussions first.
+Eğer sorunuz var ise, önce [SSS](#faq)'lara bakın. Ve eğer yardım gerekiyor ise, [tartışma](https://github.com/angristan/openvpn-install/discussions)'a bakabilirsiniz. Lütfen önce mevcut konuları ve tartışmaları araştırın.
 
 ### Headless install
 
