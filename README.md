@@ -19,12 +19,12 @@ Her istemci internet trafiğini sunucu üzerinden tamamen şifrelenmiş olarak y
 ```mermaid
 graph LR
   A[Telefon] --> VPN
-  B[Laptop] --> VPN
+  B[Dizüstü cihaz] --> VPN
   C[Bilgisayar] --> VPN
 
   VPN[OpenVPN Sunucusu]
 
-  VPN -->|Şifrelenmiş Traffik| I[Internet]
+  VPN -->|Şifrelenmiş Trafik| I[İnternet]
 ```
 
 ## Kullanım
